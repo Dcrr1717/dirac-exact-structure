@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "feast-spectral"
+version = "0.1.0"
+description = "Exact-structure spectral discretization of the radial Dirac operator (cusp-adapted gamma-Laguerre basis, exact Gauss-Laguerre assembly, mass-shifted pencil) plus a FEAST/Laguerre solver for the radial Schrodinger problem."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "C. D. Reinoso", email = "cesardanielrrch@gmail.com" }]
+keywords = [
+  "Dirac equation",
+  "spectral methods",
+  "generalized Laguerre basis",
+  "kinetic balance",
+  "spectral pollution",
+  "FEAST",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+
+# Floors from requirements.txt.  sympy was previously declared here on
+# the grounds that it is imported by the leakage-exponent scripts
+# (l1prime_fiber_lemma, l2_global_defect, l3_cusp_rate, t1_bounded_window,
+# dirac_stark/angular).  Those scripts are NOT vendored in this package
+# (see README.md), and no file that IS vendored imports sympy, so the
+# dependency has been removed to keep the declared environment equal to
+# the one this package actually needs.  The forty-digit reference values
+# use the standard library `decimal` module.
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.urls]
+Repository = "https://github.com/Dcrr1717/feast-spectral"
+
+# The repository is a script/driver collection, not an installable library:
+# `src/` and `exploration/dirac/` are put on sys.path by conftest.py, and the
+# drivers are run directly (see README, "Paper A - reproduce"). No package
+# discovery is attempted.
+[tool.setuptools]
+py-modules = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "exploration/dirac"]
+python_files = ["test_*.py"]
+addopts = "-ra"
